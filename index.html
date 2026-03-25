@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ELLA — Espace des Filles</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- DÉCOR GLOBAL -->
+<div class="bg-aurora" aria-hidden="true">
+  <div class="aurora a1"></div><div class="aurora a2"></div><div class="aurora a3"></div>
+</div>
+<canvas id="stars-canvas" aria-hidden="true"></canvas>
+
+<!-- ══ PAGE SPLASH ══ -->
+<div class="page active" id="page-splash">
+  <div class="splash-center">
+    <div class="splash-logo-wrap">
+      <div class="logo-ring-outer"></div>
+      <div class="logo-ring-inner"></div>
+      <span class="logo-star-center">✦</span>
+    </div>
+    <h1 class="splash-title">RiseFille</h1>
+    <p class="splash-tagline">L'espace numérique des filles qui changent le monde</p>
+    <div class="splash-btns">
+      <button class="btn-primary large" onclick="goTo('page-login')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+        Se connecter
+      </button>
+      <button class="btn-outline large" onclick="goTo('page-register')">Créer mon compte</button>
+    </div>
+    <p class="splash-note">Rejoins des milliers de filles inspirantes • 100% gratuit • Espace sécurisé</p>
+  </div>
+</div>
+
+<!-- ══ PAGE CONNEXION ══ -->
+<div class="page" id="page-login">
+  <div class="auth-card">
+    <button class="back-top" onclick="goTo('page-splash')">← Retour</button>
+    <div class="auth-header">
+      <span class="auth-icon">🔑</span>
+      <h2>Bon retour !</h2>
+      <p>Connecte-toi à ton espace RiseFille</p>
+    </div>
+    <div class="auth-fields">
+      <div class="field">
+        <label>Prénom</label>
+        <input type="text" id="l-prenom" placeholder="Ton prénom"/>
+      </div>
+      <div class="field">
+        <label>Mot de passe</label>
+        <div class="pwd-wrap">
+          <input type="password" id="l-mdp" placeholder="••••••••"/>
+          <button type="button" class="eye-btn" onclick="togglePwd('l-mdp',this)">👁</button>
+        </div>
+      </div>
+      <p class="auth-error" id="l-error"></p>
+      <button class="btn-primary w100" onclick="doLogin()">Se connecter →</button>
+    </div>
+    <p class="auth-switch">Pas encore de compte ?
+      <button class="link-btn" onclick="goTo('page-register')">Créer mon compte</button>
+    </p>
+  </div>
+</div>
+
+<!-- ══ PAGE INSCRIPTION ══ -->
+<div class="page" id="page-register">
+  <div class="auth-card tall">
+    <button class="back-top" onclick="goTo('page-splash')">← Retour</button>
+    <div class="auth-header">
+      <h2>Rejoins RiseFille!</h2>
+      <p>Crée ton espace en quelques secondes</p>
+    </div>
+    <div class="auth-fields">
+      <div class="field-row">
+        <div class="field"><label>Nom</label><input type="text" id="r-nom" placeholder="Nom de famille"/></div>
+        <div class="field"><label>Prénom</label><input type="text" id="r-prenom" placeholder="Prénom"/></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Âge</label><input type="number" id="r-age" placeholder="Ton âge" min="8" max="99"/></div>
+        <div class="field"><label>Ville / Pays</label><input type="text" id="r-ville" placeholder="Ex: Bujumbura"/></div>
+      </div>
+      <div class="field">
+        <label>Mot de passe</label>
+        <div class="pwd-wrap">
+          <input type="password" id="r-mdp" placeholder="Min. 4 caractères"/>
+          <button type="button" class="eye-btn" onclick="togglePwd('r-mdp',this)">👁</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Confirmer le mot de passe</label>
+        <input type="password" id="r-mdp2" placeholder="Répète ton mot de passe"/>
+      </div>
+      <p class="auth-error" id="r-error"></p>
+      <button class="btn-primary w100" onclick="doRegister()">Créer mon compte </button>
+    </div>
+    <p class="auth-switch">Déjà un compte ?
+      <button class="link-btn" onclick="goTo('page-login')">Se connecter</button>
+    </p>
+  </div>
+</div>
+
+<!-- ══ PAGE BIENVENUE ══ -->
+<div class="page" id="page-welcome">
+  <div class="welcome-scene">
+    <div class="welcome-petals" id="welcome-petals"></div>
+    <div class="welcome-card">
+      <div class="welcome-avatar-wrap">
+        <div class="welcome-avatar" id="welcome-avatar">A</div>
+        <div class="welcome-avatar-ring"></div>
+      </div>
+      <div class="welcome-badge">✦ Bienvenue dans ELLA ✦</div>
+      <h2 class="welcome-name" id="welcome-name">Bonjour !</h2>
+      <p class="welcome-city" id="welcome-city">—</p>
+      <p class="welcome-desc">
+        Tu entres dans un espace <strong>sûr</strong>, <strong>bienveillant</strong> et
+        <strong>rien que pour toi</strong>. Discute, témoigne, connais tes droits,
+        partage tes talents et apprends à coder. <em>Ensemble on s'élève.</em>
+      </p>
+      <div class="welcome-stats">
+        <div class="wstat"><span class="wn">2 841</span><span class="wl">Filles</span></div>
+        <div class="wstat-sep">·</div>
+        <div class="wstat"><span class="wn">1 203</span><span class="wl">Témoignages</span></div>
+        <div class="wstat-sep">·</div>
+        <div class="wstat"><span class="wn">48</span><span class="wl">Pays</span></div>
+      </div>
+      <button class="btn-primary large" onclick="goToApp()">Entrer dans mon espace ✨</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ APP PRINCIPALE ══ -->
+<div class="page app-layout" id="page-app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <div class="sb-logo">✦ RiseFille</div>
+      <button class="sb-close" onclick="closeSidebar()">✕</button>
+    </div>
+    <div class="sb-user">
+      <div class="sb-avatar" id="sb-avatar">A</div>
+      <div class="sb-user-info">
+        <div class="sb-name" id="sb-name">—</div>
+        <div class="sb-city" id="sb-city">—</div>
+      </div>
+    </div>
+    <nav class="sb-nav">
+      <button class="sb-item active" data-sec="home" onclick="openSec('home',this)"><span class="sb-icon">🏠</span>Accueil</button>
+      <button class="sb-item" data-sec="discussions" onclick="openSec('discussions',this)"><span class="sb-icon">💬</span>Discussions<span class="sb-badge">3</span></button>
+      <button class="sb-item" data-sec="temoignages" onclick="openSec('temoignages',this)"><span class="sb-icon">📖</span>Témoignages</button>
+      <button class="sb-item" data-sec="droits" onclick="openSec('droits',this)"><span class="sb-icon">⚖️</span>Mes Droits</button>
+      <button class="sb-item" data-sec="talents" onclick="openSec('talents',this)"><span class="sb-icon">🌟</span>Vitrine Talents<span class="sb-new">NEW</span></button>
+      <button class="sb-item" data-sec="code" onclick="openSec('code',this)"><span class="sb-icon">💻</span>Apprendre à Coder</button>
+    </nav>
+    <div class="sb-footer">
+      <button class="sb-logout" onclick="doLogout()"> Déconnexion</button>
+    </div>
+  </aside>
+  <div class="sb-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
+
+  <!-- MAIN -->
+  <div class="app-main">
+    <header class="topbar">
+      <button class="burger-btn" onclick="openSidebar()">
+        <span></span><span></span><span></span>
+      </button>
+      <h1 class="topbar-title" id="topbar-title">Accueil</h1>
+      <div class="topbar-right">
+        <button class="notif-btn" title="Notifications">🔔<span class="notif-dot"></span></button>
+        <div class="topbar-avatar" id="topbar-avatar">A</div>
+      </div>
+    </header>
+
+    <!-- ── HOME ── -->
+    <section class="sec active" id="sec-home">
+      <div class="home-hero">
+        <div class="hh-text">
+          <p class="hh-label">Mon espace RiseFille</p>
+          <h2 class="hh-greeting" id="hh-greeting">Bonjour </h2>
+          <p class="hh-sub">Que veux-tu faire aujourd'hui ?</p>
+        </div>
+        <div class="hh-art">
+          <div class="hha-circle c1"></div>
+          <div class="hha-circle c2"></div>
+        </div>
+      </div>
+      <div class="home-grid">
+        <button class="hcard" onclick="openSec('discussions',document.querySelector('[data-sec=discussions]'))">
+          <span class="hc-icon">💬</span>
+          <span class="hc-title">Discussions</span>
+          <span class="hc-desc">3 nouveaux messages</span>
+          <span class="hc-arr">→</span>
+        </button>
+        <button class="hcard" onclick="openSec('temoignages',document.querySelector('[data-sec=temoignages]'))">
+          <span class="hc-icon">📖</span>
+          <span class="hc-title">Témoignages</span>
+          <span class="hc-desc">Partage ton histoire</span>
+          <span class="hc-arr">→</span>
+        </button>
+        <button class="hcard" onclick="openSec('droits',document.querySelector('[data-sec=droits]'))">
+          <span class="hc-icon">⚖️</span>
+          <span class="hc-title">Mes Droits</span>
+          <span class="hc-desc">Connais-les, défends-les</span>
+          <span class="hc-arr">→</span>
+        </button>
+        <button class="hcard featured" onclick="openSec('talents',document.querySelector('[data-sec=talents]'))">
+          <span class="hc-icon">🌟</span>
+          <span class="hc-title">Vitrine Talents</span>
+          <span class="hc-desc">Brille et inspire le monde</span>
+          <span class="hc-arr">→</span>
+        </button>
+        <button class="hcard code-card" onclick="openSec('code',document.querySelector('[data-sec=code]'))">
+          <span class="hc-icon">💻</span>
+          <span class="hc-title">Apprendre à Coder</span>
+          <span class="hc-desc">Ton avenir numérique</span>
+          <span class="hc-arr">→</span>
+        </button>
+      </div>
+      <div class="quote-of-day">
+        <span class="qod-mark">"</span>
+        <p class="qod-text" id="qod-text">Une femme avec une voix est, par définition, une femme forte.</p>
+        <p class="qod-author" id="qod-author">— Melinda Gates</p>
+      </div>
+    </section>
+
+    <!-- ── DISCUSSIONS ── -->
+    <section class="sec" id="sec-discussions">
+      <div class="sec-hdr">
+        <h2>💬 Discussions</h2>
+        <p>Un espace libre, bienveillant, pour parler de tout avec d'autres filles.</p>
+      </div>
+      <div class="topic-chips">
+        <button class="chip active" onclick="filterChip(this,'all')">Tous</button>
+        <button class="chip" onclick="filterChip(this,'education')"> Éducation</button>
+        <button class="chip" onclick="filterChip(this,'sante')"> Santé</button>
+        <button class="chip" onclick="filterChip(this,'tech')"> Tech</button>
+        <button class="chip" onclick="filterChip(this,'vie')"> Vie quotidienne</button>
+      </div>
+      <div class="chat-box">
+        <div class="chat-feed" id="chat-feed">
+          <div class="chat-datesep">Aujourd'hui</div>
+          <div class="cmsg other" data-topic="education">
+            <div class="cm-av">A</div>
+            <div class="cm-bub">
+              <div class="cm-who">Ange <span class="cm-t">09:14</span></div>
+              <div class="cm-txt">Bonjour à toutes ! Qui a des conseils pour rester concentrée lors des révisions ?</div>
+            </div>
+          </div>
+          <div class="cmsg other" data-topic="education">
+            <div class="cm-av" style="background:linear-gradient(135deg,#ec4899,#f472b6)">F</div>
+            <div class="cm-bub">
+              <div class="cm-who">Francine <span class="cm-t">09:17</span></div>
+              <div class="cm-txt">La technique Pomodoro ! 25 min de travail, 5 min de pause — ça marche vraiment </div>
+            </div>
+          </div>
+          <div class="cmsg other" data-topic="tech">
+            <div class="cm-av" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">N</div>
+            <div class="cm-bub">
+              <div class="cm-who">Nadège <span class="cm-t">09:45</span></div>
+              <div class="cm-txt">J'ai créé mon premier site web après 3 mois de code !  Si je l'ai fait, vous aussi vous pouvez !</div>
+            </div>
+          </div>
+        </div>
+        <div class="chat-compose">
+          <input type="text" id="chat-input" class="chat-compose-input" placeholder="Écris ton message..."/>
+          <select id="chat-topic" class="chat-topic-sel">
+            <option value="vie">🌺</option>
+            <option value="education">📚</option>
+            <option value="sante">💊</option>
+            <option value="tech">💻</option>
+          </select>
+          <button class="btn-send-round" onclick="sendMsg()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TÉMOIGNAGES ── -->
+    <section class="sec" id="sec-temoignages">
+      <div class="sec-hdr">
+        <h2>Témoignages</h2>
+        <p>Partage ton vécu, ton parcours, tes victoires. Ta parole peut changer une vie.</p>
+        <button class="btn-primary small" onclick="toggleForm('temo-form-wrap')">+ Partager mon témoignage</button>
+      </div>
+      <div class="collapsible-form" id="temo-form-wrap" style="display:none">
+        <div class="inner-form">
+          <h3>Partager mon témoignage</h3>
+          <div class="field"><label>Titre</label><input type="text" id="tf-titre" placeholder="Ex: Comment j'ai surmonté l'échec scolaire"/></div>
+          <div class="field">
+            <label>Catégorie</label>
+            <select id="tf-cat" class="sel-input">
+              <option value="parcours"> Parcours scolaire</option>
+              <option value="courage">Courage & résilience</option>
+              <option value="famille"> Famille</option>
+              <option value="reve"> Rêves & ambitions</option>
+              <option value="discrimination"> Contre la discrimination</option>
+            </select>
+          </div>
+          <div class="field"><label>Ton témoignage</label><textarea id="tf-texte" rows="5" placeholder="Raconte ton histoire avec tes mots..."></textarea></div>
+          <div class="field">
+            <label>Photo (optionnel)</label>
+            <div class="photo-drop" onclick="document.getElementById('tf-photo').click()">
+              <span>📷</span><span id="tf-photo-lbl">Clique pour choisir une photo</span>
+              <input type="file" id="tf-photo" accept="image/*" style="display:none" onchange="previewImg(this,'tf-prev')"/>
+            </div>
+            <img id="tf-prev" class="img-preview" style="display:none" alt="Aperçu"/>
+          </div>
+          <div class="form-btns">
+            <button class="btn-outline" onclick="toggleForm('temo-form-wrap')">Annuler</button>
+            <button class="btn-primary" onclick="pubTemo()">Publier </button>
+          </div>
+        </div>
+      </div>
+      <div class="temo-list" id="temo-list">
+        <article class="tcard">
+          <div class="tcard-hd">
+            <div class="tc-av" style="background:linear-gradient(135deg,#7c3aed,#c026d3)">M</div>
+            <div class="tc-meta"><strong>RUKUNDO Reine</strong><span> Makamba · Il y a 1 jours</span></div>
+            <span class="tcat-badge cat-parcours"> Parcours</span>
+          </div>
+          <h3 class="tc-title">Comment j'ai connu le codage</h3>
+          <p class="tc-body">J'ai connu le codage grâce AGCCI (African Girls Can Code Initiative), un programme qui encourage les jeunes filles africaines à se lancer dans la tech. Ça m'a ouvert les portes du développement d'applications avec MIT App Inventor, HTML, CSS, ... . <em>Le codage, c'est comme créer ta propre aventure!.</em></p>
+          <img src="c:\Users\Cefore Rusi\Documents\Screenshot 2026-03-23 180635.png" class="tc-photo" alt="Reine"/>
+          <div class="tc-acts">
+            <button class="act-btn like-btn" onclick="toggleLike(this)"><span class="lk-heart">🤍</span><span class="lk-n">66</span> J'aime</button>
+            <button class="act-btn" onclick="toggleComments(this)">💬 <span>20</span> Commentaires</button>
+            <button class="act-btn" onclick="openShare('témoignage de RUKUNDO Reine')">🔗 Partager</button>
+          </div>
+          <div class="comments-wrap" style="display:none">
+            <div class="cmnt"><strong>Arlène :</strong> Courage à toi ma soeur et Félicitations </div>
+            <div class="cmnt"><strong>Zoé :</strong> Moi aussi j'ai participer à ce camp et c'était très bien </div>
+            <div class="cmnt-compose">
+              <input type="text" placeholder="Ajouter un commentaire..." class="cmnt-input" onkeydown="if(event.key==='Enter')addCmt(this)"/>
+              <button onclick="addCmt(this.previousElementSibling)">→</button>
+            </div>
+          </div>
+        </article>
+        <article class="tcard">
+          <div class="tcard-hd">
+            <div class="tc-av" style="background:linear-gradient(135deg,#7c3aed,#c026d3)">M</div>
+            <div class="tc-meta"><strong>Marie Keza</strong><span> Kirundo · Il y a 2 jours</span></div>
+            <span class="tcat-badge cat-parcours"> Parcours</span>
+          </div>
+          <h3 class="tc-title">Comment j'ai surmonté l'échec pour devenir ingénieure</h3>
+          <p class="tc-body">J'ai longtemps cru que les maths n'étaient pas pour moi. À 15 ans j'ai raté mon année deux fois. Tout le monde me disait que ce n'était pas grave, que je pouvais faire autre chose. Mais quelque chose en moi refusait d'abandonner. Aujourd'hui je suis en 3ème année d'ingénierie informatique. La route a été dure, mais chaque larme m'a rendue plus forte. <em>Croyez en vous — votre seule vraie limite c'est ce que vous décidez d'accepter.</em></p>
+          <img src="c:\Users\Cefore Rusi\Documents\Screenshot 2026-03-25 100001.png" class="tc-photo" alt="Marie"/>
+          <div class="tc-acts">
+            <button class="act-btn like-btn" onclick="toggleLike(this)"><span class="lk-heart">🤍</span><span class="lk-n">47</span> J'aime</button>
+            <button class="act-btn" onclick="toggleComments(this)">💬 <span>12</span> Commentaires</button>
+            <button class="act-btn" onclick="openShare('témoignage de Marie Keza')">🔗 Partager</button>
+          </div>
+          <div class="comments-wrap" style="display:none">
+            <div class="cmnt"><strong>Aïcha :</strong> Tu es une vraie inspiration ! Merci </div>
+            <div class="cmnt"><strong>Sandra :</strong> Exactement mon histoire ! </div>
+            <div class="cmnt-compose">
+              <input type="text" placeholder="Ajouter un commentaire..." class="cmnt-input" onkeydown="if(event.key==='Enter')addCmt(this)"/>
+              <button onclick="addCmt(this.previousElementSibling)">→</button>
+            </div>
+          </div>
+        </article>
+        <article class="tcard">
+          <div class="tcard-hd">
+            <div class="tc-av" style="background:linear-gradient(135deg,#ec4899,#f97316)">S</div>
+            <div class="tc-meta"><strong>Sandra Niyonkuru</strong><span> Bujumbura· Il y a 5 jours</span></div>
+            <span class="tcat-badge cat-reve"> Rêves</span>
+          </div>
+          <h3 class="tc-title">Ma première collection de mode — de rien à tout</h3>
+          <p class="tc-body">Personne ne me croyait quand je disais que je voulais créer ma marque de mode. "Tu es pauvre, ça coûte trop cher" disaient-ils. J'ai commencé avec une machine à coudre empruntée et 3 mètres de tissu. Aujourd'hui ma collection a été présentée lors de la fashion week de Nairobi. <em>Ne laissez jamais quelqu'un définir les limites de vos rêves.</em></p>
+          <div class="tc-acts">
+            <button class="act-btn like-btn" onclick="toggleLike(this)"><span class="lk-heart">🤍</span><span class="lk-n">89</span> J'aime</button>
+            <button class="act-btn" onclick="toggleComments(this)">💬 <span>24</span> Commentaires</button>
+            <button class="act-btn" onclick="openShare('témoignage de Sandra Niyonkuru')">🔗 Partager</button>
+          </div>
+          <div class="comments-wrap" style="display:none">
+            <div class="cmnt"><strong>Joëlle :</strong> Notre fierté ! </div>
+            <div class="cmnt-compose">
+              <input type="text" placeholder="Ajouter un commentaire..." class="cmnt-input" onkeydown="if(event.key==='Enter')addCmt(this)"/>
+              <button onclick="addCmt(this.previousElementSibling)">→</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ── DROITS ── -->
+    <section class="sec" id="sec-droits">
+      <div class="sec-hdr">
+        <h2> Mes Droits</h2>
+        <p>Connaître ses droits, c'est la première étape pour les défendre.</p>
+      </div>
+      <div class="droits-quote">
+        <p>« Les droits des femmes sont des droits humains. »</p>
+        <span>— Hillary Clinton, 1995</span>
+      </div>
+      <div class="droits-grid">
+        <div class="dcard" onclick="flipDroit(this)">
+          <div class="dcard-f"><span class="dc-ico">🎓</span><h4>Droit à l'éducation</h4><span class="dc-tap">Appuie pour en savoir plus ↓</span></div>
+          <div class="dcard-b"><p>Toute fille a le droit fondamental à l'éducation, garanti par la Convention des droits de l'enfant (CDE). Aucune tradition, aucun parent ne peut te le retirer. De l'école primaire à l'université, l'éducation est ton droit inaliénable.</p><a href="https://www.unicef.org/fr/education" target="_blank" class="dc-link">UNICEF Education →</a></div>
+        </div>
+        <div class="dcard" onclick="flipDroit(this)">
+          <div class="dcard-f"><span class="dc-ico">🛡️</span><h4>Droit à la sécurité</h4><span class="dc-tap">Appuie pour en savoir plus ↓</span></div>
+          <div class="dcard-b"><p>Tu as le droit d'être protégée contre toute violence physique, psychologique ou sexuelle. Les mariages forcés, mutilations génitales et harcèlement sont des violations criminelles de tes droits.</p><a href="https://www.unwomen.org/fr" target="_blank" class="dc-link">ONU Femmes →</a></div>
+        </div>
+        <div class="dcard" onclick="flipDroit(this)">
+          <div class="dcard-f"><span class="dc-ico">💊</span><h4>Droit à la santé</h4><span class="dc-tap">Appuie pour en savoir plus ↓</span></div>
+          <div class="dcard-b"><p>Tu as droit à des soins de qualité incluant santé mentale, reproductive et maternelle. Les services de santé doivent être accessibles et respectueux. Ta santé est ta priorité absolue.</p></div>
+        </div>
+        <div class="dcard" onclick="flipDroit(this)">
+          <div class="dcard-f"><span class="dc-ico">🗣️</span><h4>Liberté d'expression</h4><span class="dc-tap">Appuie pour en savoir plus ↓</span></div>
+          <div class="dcard-b"><p>Tu as le droit de penser, parler et exprimer tes opinions librement. Tu peux participer à la vie politique, associative et civique. Ta voix compte autant que n'importe qui.</p></div>
+        </div>
+        <div class="dcard" onclick="flipDroit(this)">
+          <div class="dcard-f"><span class="dc-ico">💍</span><h4>Non au mariage précoce</h4><span class="dc-tap">Appuie pour en savoir plus ↓</span></div>
+          <div class="dcard-b"><p>Tu as le droit absolu de choisir librement si, quand et qui tu épouses. Le mariage avant 18 ans est un mariage forcé selon les Nations Unies. Il est interdit et nuit à ton éducation et ta santé.</p></div>
+        </div>
+        <div class="dcard" onclick="flipDroit(this)">
+          <div class="dcard-f"><span class="dc-ico">💼</span><h4>Égalité au travail</h4><span class="dc-tap">Appuie pour en savoir plus ↓</span></div>
+          <div class="dcard-b"><p>Tu as le droit de travailler, d'être payée équitablement et d'évoluer sans discrimination de genre. À travail égal, salaire égal. Le harcèlement au travail est illégal partout dans le monde.</p></div>
+        </div>
+      </div>
+      <div class="urgence-banner">
+        <h4>Besoin d'aide urgente ?</h4>
+        <p>Si tu es victime de violence ou d'abus, n'attends pas. Des organismes peuvent t'aider.</p>
+        <a href="https://www.unwomen.org/fr" target="_blank" class="btn-outline small">Trouver de l'aide →</a>
+      </div>
+    </section>
+
+    <!-- ── TALENTS ── -->
+    <section class="sec" id="sec-talents">
+      <div class="sec-hdr">
+        <h2>Vitrine des Talents</h2>
+        <p>Chaque fille est unique. Ici, ton talent mérite d'être vu par le monde entier.</p>
+        <button class="btn-primary small" onclick="toggleForm('talent-form-wrap')">+ Présenter mon talent</button>
+      </div>
+      <div class="collapsible-form" id="talent-form-wrap" style="display:none">
+        <div class="inner-form">
+          <h3> Présente ton talent</h3>
+          <div class="field-row">
+            <div class="field"><label>Prénom & Nom</label><input type="text" id="tl-nom" placeholder="Ton nom complet"/></div>
+            <div class="field"><label>Âge</label><input type="number" id="tl-age" placeholder="Âge" min="5"/></div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Domaine</label>
+              <select id="tl-domaine" class="sel-input">
+                <option value="art"> Art & Dessin</option>
+                <option value="musique"> Musique & Chant</option>
+                <option value="danse"> Danse</option>
+                <option value="ecriture"> Écriture</option>
+                <option value="sport"> Sport</option>
+                <option value="cuisine"> Cuisine</option>
+                <option value="mode"> Mode</option>
+                <option value="entrepreneuriat"> Entrepreneuriat</option>
+                <option value="sciences"> Sciences & Tech</option>
+                <option value="autre"> Autre</option>
+              </select>
+            </div>
+            <div class="field"><label>Ville / Pays</label><input type="text" id="tl-ville" placeholder="Ex: Dakar, Sénégal"/></div>
+          </div>
+          <div class="field"><label>Slogan (1 phrase percutante)</label><input type="text" id="tl-slogan" placeholder="Ex: Je transforme la douleur en beauté sur toile"/></div>
+          <div class="field"><label>Description</label><textarea id="tl-desc" rows="4" placeholder="Parle-nous de ton talent, comment tu l'as découvert..."></textarea></div>
+          <div class="field">
+            <label>Photo de ton talent</label>
+            <div class="photo-drop" onclick="document.getElementById('tl-photo').click()">
+              <span>🖼️</span><span id="tl-photo-lbl">Clique pour ajouter une image</span>
+              <input type="file" id="tl-photo" accept="image/*" style="display:none" onchange="previewImg(this,'tl-prev')"/>
+            </div>
+            <img id="tl-prev" class="img-preview" style="display:none" alt="Aperçu"/>
+          </div>
+          <div class="form-btns">
+            <button class="btn-outline" onclick="toggleForm('talent-form-wrap')">Annuler</button>
+            <button class="btn-primary" onclick="pubTalent()">Publier dans la vitrine </button>
+          </div>
+        </div>
+      </div>
+      <!-- Filtres -->
+      <div class="topic-chips">
+        <button class="chip active" onclick="filterTalents(this,'all')">Tous</button>
+        <button class="chip" onclick="filterTalents(this,'art')">Art</button>
+        <button class="chip" onclick="filterTalents(this,'musique')"> Musique</button>
+        <button class="chip" onclick="filterTalents(this,'sciences')"> Sciences</button>
+        <button class="chip" onclick="filterTalents(this,'entrepreneuriat')"> Entrepreneuriat</button>
+        <button class="chip" onclick="filterTalents(this,'mode')"> Mode</button>
+      </div>
+      <!-- Grille -->
+      <div class="talents-grid" id="talents-grid">
+        <div class="tlcard" data-domain="art">
+          <div class="tlc-img-wrap">
+            <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=600&q=80" class="tlc-img" alt="Art"/>
+            <div class="tlc-domain">🎨 Art</div>
+          </div>
+          <div class="tlc-body">
+            <div class="tlc-head">
+              <div class="tlc-av" style="background:linear-gradient(135deg,#7c3aed,#c026d3)">A</div>
+              <div><div class="tlc-name">Aïcha Diallo</div><div class="tlc-loc">📍 Bamako, Mali · 19 ans</div></div>
+            </div>
+            <p class="tlc-slogan">"Je peins l'âme des femmes africaines en couleurs vives"</p>
+            <p class="tlc-desc">Autodidacte depuis 12 ans, exposée dans 3 galeries au Mali et au Sénégal. Mes tableaux racontent la force et la beauté de la femme africaine.</p>
+            <div class="tc-acts">
+              <button class="act-btn like-btn" onclick="toggleLike(this)"><span class="lk-heart">🤍</span><span class="lk-n">134</span> J'aime</button>
+              <button class="act-btn" onclick="toggleComments(this)">💬 18</button>
+              <button class="act-btn" onclick="openShare('talent d\'Aïcha Diallo')">🔗</button>
+            </div>
+            <div class="comments-wrap" style="display:none">
+              <div class="cmnt"><strong>Marie :</strong> Tes œuvres m'ont fait pleurer de beauté ! 😭💜</div>
+              <div class="cmnt-compose"><input type="text" placeholder="Commenter..." class="cmnt-input" onkeydown="if(event.key==='Enter')addCmt(this)"/><button onclick="addCmt(this.previousElementSibling)">→</button></div>
+            </div>
+          </div>
+        </div>
+        <div class="tlcard" data-domain="sciences">
+          <div class="tlc-img-wrap">
+            <img src="https://images.unsplash.com/photo-1532094349884-543559163793?w=600&q=80" class="tlc-img" alt="Sciences"/>
+            <div class="tlc-domain">🔬 Sciences</div>
+          </div>
+          <div class="tlc-body">
+            <div class="tlc-head">
+              <div class="tlc-av" style="background:linear-gradient(135deg,#059669,#34d399)">N</div>
+              <div><div class="tlc-name">Nadia Uwimana</div><div class="tlc-loc">📍 Kigali, Rwanda · 21 ans</div></div>
+            </div>
+            <p class="tlc-slogan">"La science est mon superpower — et le tien aussi"</p>
+            <p class="tlc-desc">Étudiante en biochimie, j'ai développé un filtre d'eau à base de plantes locales pour les villages ruraux. Mon projet a été sélectionné par l'UNESCO.</p>
+            <div class="tc-acts">
+              <button class="act-btn like-btn" onclick="toggleLike(this)"><span class="lk-heart">🤍</span><span class="lk-n">212</span> J'aime</button>
+              <button class="act-btn" onclick="toggleComments(this)">💬 31</button>
+              <button class="act-btn" onclick="openShare('talent de Nadia Uwimana')">🔗</button>
+            </div>
+            <div class="comments-wrap" style="display:none">
+              <div class="cmnt"><strong>Fatou :</strong> Tu vas sauver des vies ! 🌊</div>
+              <div class="cmnt-compose"><input type="text" placeholder="Commenter..." class="cmnt-input" onkeydown="if(event.key==='Enter')addCmt(this)"/><button onclick="addCmt(this.previousElementSibling)">→</button></div>
+            </div>
+          </div>
+        </div>
+        <div class="tlcard" data-domain="entrepreneuriat">
+          <div class="tlc-img-wrap">
+            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80" class="tlc-img" alt="Entrepreneuriat"/>
+            <div class="tlc-domain">🚀 Entrepreneuriat</div>
+          </div>
+          <div class="tlc-body">
+            <div class="tlc-head">
+              <div class="tlc-av" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">J</div>
+              <div><div class="tlc-name">Joëlle Mukamana</div><div class="tlc-loc">📍 Bujumbura, Burundi · 24 ans</div></div>
+            </div>
+            <p class="tlc-slogan">"J'ai transformé ma passion en entreprise à 22 ans"</p>
+            <p class="tlc-desc">Fondatrice de "TresseAfrik" — une app qui connecte coiffeuses et clientes. 300 coiffeuses inscrites, 5 000 clientes servies en 1 an.</p>
+            <div class="tc-acts">
+              <button class="act-btn like-btn" onclick="toggleLike(this)"><span class="lk-heart">🤍</span><span class="lk-n">387</span> J'aime</button>
+              <button class="act-btn" onclick="toggleComments(this)">💬 56</button>
+              <button class="act-btn" onclick="openShare('talent de Joëlle Mukamana')">🔗</button>
+            </div>
+            <div class="comments-wrap" style="display:none">
+              <div class="cmnt"><strong>Sandra :</strong> La prochaine licorne africaine ! 🦄</div>
+              <div class="cmnt-compose"><input type="text" placeholder="Commenter..." class="cmnt-input" onkeydown="if(event.key==='Enter')addCmt(this)"/><button onclick="addCmt(this.previousElementSibling)">→</button></div>
+            </div>
+          </div>
+        </div>
+        <div class="tlcard" data-domain="musique">
+          <div class="tlc-img-wrap">
+            <img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=600&q=80" class="tlc-img" alt="Musique"/>
+            <div class="tlc-domain">🎵 Musique</div>
+          </div>
+          <div class="tlc-body">
+            <div class="tlc-head">
+              <div class="tlc-av" style="background:linear-gradient(135deg,#ec4899,#f472b6)">L</div>
+              <div><div class="tlc-name">Laetitia Ndayisenga</div><div class="tlc-loc">📍 Gitega, Burundi · 17 ans</div></div>
+            </div>
+            <p class="tlc-slogan">"Ma voix est mon instrument, ma liberté"</p>
+            <p class="tlc-desc">Chanteuse et compositrice, j'ai sorti mon EP "Ijoro" à 16 ans — plus de 50 000 écoutes sur Spotify. Je mêle afrobeat et kirundi traditionnel.</p>
+            <div class="tc-acts">
+              <button class="act-btn like-btn" onclick="toggleLike(this)"><span class="lk-heart">🤍</span><span class="lk-n">291</span> J'aime</button>
+              <button class="act-btn" onclick="toggleComments(this)">💬 44</button>
+              <button class="act-btn" onclick="openShare('talent de Laetitia')">🔗</button>
+            </div>
+            <div class="comments-wrap" style="display:none">
+              <div class="cmnt"><strong>Aïcha :</strong> "Ijoro" est sur repeat ! 🎶</div>
+              <div class="cmnt-compose"><input type="text" placeholder="Commenter..." class="cmnt-input" onkeydown="if(event.key==='Enter')addCmt(this)"/><button onclick="addCmt(this.previousElementSibling)">→</button></div>
+            </div>
+          </div>
+        </div>
+        <div class="tlcard" data-domain="mode">
+          <div class="tlc-img-wrap">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" class="tlc-img" alt="Mode"/>
+            <div class="tlc-domain">👗 Mode</div>
+          </div>
+          <div class="tlc-body">
+            <div class="tlc-head">
+              <div class="tlc-av" style="background:linear-gradient(135deg,#dc2626,#f97316)">G</div>
+              <div><div class="tlc-name">Grace Nkurunziza</div><div class="tlc-loc">📍 Nairobi, Kenya · 23 ans</div></div>
+            </div>
+            <p class="tlc-slogan">"L'Afrique a son style — je le montre au monde"</p>
+            <p class="tlc-desc">Designer 100% éco-responsable avec des tissus africains. Présentée à la Nairobi Fashion Week 2024. Ma mission : rendre la mode africaine internationale.</p>
+            <div class="tc-acts">
+              <button class="act-btn like-btn" onclick="toggleLike(this)"><span class="lk-heart">🤍</span><span class="lk-n">445</span> J'aime</button>
+              <button class="act-btn" onclick="toggleComments(this)">💬 67</button>
+              <button class="act-btn" onclick="openShare('talent de Grace Nkurunziza')">🔗</button>
+            </div>
+            <div class="comments-wrap" style="display:none">
+              <div class="cmnt"><strong>Joëlle :</strong> On devrait collaborer ! 💜✨</div>
+              <div class="cmnt-compose"><input type="text" placeholder="Commenter..." class="cmnt-input" onkeydown="if(event.key==='Enter')addCmt(this)"/><button onclick="addCmt(this.previousElementSibling)">→</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CODER ── -->
+    <section class="sec" id="sec-code">
+      <div class="sec-hdr">
+        <h2>💻 Apprendre à Coder</h2>
+        <p>La technologie change le monde — et les filles doivent en être les architectes !</p>
+      </div>
+      <div class="code-manifesto">
+        <div class="cm-text">
+          <h3>Pourquoi toi, pourquoi maintenant ?</h3>
+          <div class="cm-stats">
+            <div class="cms"><span>25%</span><small>des devs sont des femmes — changeons ça !</small></div>
+            <div class="cms"><span>3×</span><small>plus de débouchés tech d'ici 2030</small></div>
+            <div class="cms"><span>🌍</span><small>Apprends depuis chez toi, en ligne, gratuitement</small></div>
+          </div>
+        </div>
+        <div class="code-term">
+          <div class="ct-bar"><span class="ctb red"></span><span class="ctb yellow"></span><span class="ctb green"></span><span class="ct-fname">ella_code.js</span></div>
+          <div class="ct-body">
+            <div class="ct-line"><span class="c-cmt">// Bienvenue dans le code ! 💜</span></div>
+            <div class="ct-line"><span class="c-kw">function</span> <span class="c-fn">maForce</span>(prenom) {</div>
+            <div class="ct-line">&nbsp;&nbsp;<span class="c-kw">return</span> <span class="c-str">"Je suis "</span> + prenom + <span class="c-str">", je code !"</span>;</div>
+            <div class="ct-line">}</div>
+            <div class="ct-line"></div>
+            <div class="ct-line"><span class="c-kw">let</span> msg = maForce(<span class="c-str">"Amina"</span>);</div>
+            <div class="ct-line">console.<span class="c-fn">log</span>(msg);</div>
+            <div class="ct-line c-out"><span class="c-cmt">// → Je suis Amina, je code !</span></div>
+          </div>
+        </div>
+      </div>
+      <h3 class="parcours-ttl">🗺️ Ton parcours pas à pas</h3>
+      <div class="parcours">
+        <div class="ps">
+          <div class="ps-num">1</div>
+          <div class="ps-card">
+            <div class="ps-hd"><span>🏗️</span><div><h4>HTML</h4><small>~2 semaines · Débutant · Gratuit</small></div></div>
+            <p>La structure de toute page web. C'est la fondation absolue.</p>
+            <div class="ps-tags"><span>Balises</span><span>Liens</span><span>Images</span><span>Formulaires</span></div>
+            <a href="https://www.w3schools.com/html/" target="_blank" class="btn-primary small">Commencer →</a>
+          </div>
+        </div>
+        <div class="ps">
+          <div class="ps-num">2</div>
+          <div class="ps-card">
+            <div class="ps-hd"><span>🎨</span><div><h4>CSS</h4><small>~3 semaines · Débutant · Gratuit</small></div></div>
+            <p>Couleurs, mises en page, animations — rends tes pages magnifiques.</p>
+            <div class="ps-tags"><span>Couleurs</span><span>Flexbox</span><span>Animations</span><span>Responsive</span></div>
+            <a href="https://www.w3schools.com/css/" target="_blank" class="btn-primary small">Commencer →</a>
+          </div>
+        </div>
+        <div class="ps">
+          <div class="ps-num">3</div>
+          <div class="ps-card">
+            <div class="ps-hd"><span>⚡</span><div><h4>JavaScript</h4><small>~1 mois · Intermédiaire · Gratuit</small></div></div>
+            <p>L'interactivité : boutons, logique, pages vivantes.</p>
+            <div class="ps-tags"><span>Variables</span><span>Fonctions</span><span>Événements</span><span>DOM</span></div>
+            <a href="https://www.w3schools.com/js/" target="_blank" class="btn-primary small">Commencer →</a>
+          </div>
+        </div>
+        <div class="ps">
+          <div class="ps-num">4</div>
+          <div class="ps-card">
+            <div class="ps-hd"><span>🐍</span><div><h4>Python</h4><small>~2 mois · Intermédiaire · Gratuit</small></div></div>
+            <p>IA, data science, automatisation — le langage du futur.</p>
+            <div class="ps-tags"><span>IA / ML</span><span>Data</span><span>Automation</span></div>
+            <a href="https://www.w3schools.com/python/" target="_blank" class="btn-primary small">Commencer →</a>
+          </div>
+        </div>
+      </div>
+      <div class="women-coders">
+        <h3>Elles ont codé l'Histoire 💜</h3>
+        <div class="wc-row">
+          <div class="wc"><div class="wc-av">A</div><strong>Ada Lovelace</strong><span>1re programmatrice</span></div>
+          <div class="wc"><div class="wc-av" style="background:linear-gradient(135deg,#059669,#34d399)">G</div><strong>Grace Hopper</strong><span>Inventrice du compilateur</span></div>
+          <div class="wc"><div class="wc-av" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">K</div><strong>Katherine Johnson</strong><span>Mathématicienne NASA</span></div>
+          <div class="wc"><div class="wc-av" style="background:linear-gradient(135deg,#ec4899,#f472b6)">R</div><strong>Radia Perlman</strong><span>"Mère d'Internet"</span></div>
+        </div>
+        <div class="code-motto">
+          <p>"Le code est la langue la plus démocratique du monde. Avec un ordinateur et une connexion internet, une fille de 15 ans au Burundi peut changer le monde."</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast-wrap"></div>
+
+<!-- MODALE PARTAGE -->
+<div class="modal-bg" id="share-modal-bg" onclick="closeShare()" style="display:none">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <h3>🔗 Partager</h3>
+    <p id="share-label">Partage ce contenu</p>
+    <div class="share-row">
+      <button class="share-opt" onclick="doShare('whatsapp')">💬 WhatsApp</button>
+      <button class="share-opt" onclick="doShare('facebook')">📘 Facebook</button>
+      <button class="share-opt" onclick="doShare('copy')">📋 Copier le lien</button>
+    </div>
+    <button class="btn-outline small" onclick="closeShare()" style="margin-top:.8rem;width:100%">Fermer</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
